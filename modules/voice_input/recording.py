@@ -14,14 +14,14 @@ def record_audio():
         channels=CHANNELS,
         rate=RATE,
         input=True,
-        input_device_index=0,
+        input_device_index=audio.get_default_input_device_info()["index"],
         frames_per_buffer=FRAMES_PER_BUFFER,
     )
 
     print("Start recording")
 
     frames = []
-    seconds = 1
+    seconds = 5
     for _ in range(int(RATE / FRAMES_PER_BUFFER + seconds)):
         data = stream.read(FRAMES_PER_BUFFER)
         frames.append(data)
@@ -39,5 +39,6 @@ def terminate():
 
 
 if __name__ == "__main__":
-    record_audio()
+    arr = record_audio()
+    print(arr)
     terminate()

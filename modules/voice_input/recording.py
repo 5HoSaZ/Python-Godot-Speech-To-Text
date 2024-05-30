@@ -1,5 +1,5 @@
-import pyaudio
 import numpy as np
+import pyaudio
 
 FRAMES_PER_BUFFER = 3200
 FORMAT = pyaudio.paInt16

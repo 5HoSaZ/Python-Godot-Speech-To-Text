@@ -33,7 +33,7 @@ class Recorder(PyAudio):
         stream.close()
 
         # Return normalized float32 array
-        return np.frombuffer(b"".join(frames), dtype=np.float32) / 32767.0
+        return np.frombuffer(b"".join(frames), dtype=np.float32)
 
 
 if __name__ == "__main__":

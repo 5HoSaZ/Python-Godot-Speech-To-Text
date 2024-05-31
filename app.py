@@ -3,11 +3,6 @@ import torchaudio
 from modules.voice_input import Recorder
 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
-model = bundle.get_model().to(device)
-
-
 class GreedyCTCDecoder(torch.nn.Module):
     def __init__(self, labels, blank=0):
         super().__init__()
@@ -28,17 +23,22 @@ class GreedyCTCDecoder(torch.nn.Module):
         return "".join([self.labels[i] for i in indices])
 
 
-if __name__ == '__main__':
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
+model = bundle.get_model().to(device)
+decoder = GreedyCTCDecoder(labels=bundle.get_labels())
+
+
+if __name__ == "__main__":
     rec = Recorder()
     res = rec.record_audio()
     rec.terminate()
-    waveform, sample_rate = torch.from_numpy(res), 16000
+    waveform, sample_rate = torch.from_numpy(res.reshape(1, -1)), 16000
     waveform = waveform.to(device)
     print(waveform)
 
     with torch.inference_mode():
         emission, _ = model(waveform)
 
-    decoder = GreedyCTCDecoder(labels=bundle.get_labels())
     transcript = decoder(emission[0])
     print(transcript)

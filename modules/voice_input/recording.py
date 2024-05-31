@@ -3,7 +3,7 @@ import pyaudio
 from pyaudio import PyAudio
 
 FRAMES_PER_BUFFER = 3200
-FORMAT = pyaudio.paInt16
+FORMAT = pyaudio.paFloat32
 CHANNELS = 1
 RATE = 16000
 
@@ -32,7 +32,8 @@ class Recorder(PyAudio):
         stream.stop_stream()
         stream.close()
 
-        return np.frombuffer(b"".join(frames), dtype="int16")
+        # Return normalized float32 array
+        return np.frombuffer(b"".join(frames), dtype=np.float32) / 32767.0
 
 
 if __name__ == "__main__":

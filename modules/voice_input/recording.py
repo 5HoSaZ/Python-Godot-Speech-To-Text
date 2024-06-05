@@ -1,9 +1,8 @@
-import torch
 import numpy as np
 import pyaudio
 from pyaudio import PyAudio
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 FRAMES_PER_BUFFER = 3200
 FORMAT = pyaudio.paFloat32
 CHANNELS = 1
@@ -12,7 +11,7 @@ CHANNELS = 1
 class Recorder(PyAudio):
     sample_rate = 16000
 
-    def record_audio(self) -> torch.Tensor:
+    def record_audio(self) -> np.ndarray:
         stream = self.open(
             format=FORMAT,
             channels=CHANNELS,
@@ -37,7 +36,7 @@ class Recorder(PyAudio):
 
         # Return normalized float32 array
         res = np.frombuffer(b"".join(frames), dtype=np.float32).reshape(1, -1)
-        return torch.tensor(res, device=device)
+        return res
 
 
 if __name__ == "__main__":

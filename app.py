@@ -33,7 +33,7 @@ if __name__ == "__main__":
     rec = Recorder()
     res = rec.record_audio()
     rec.terminate()
-    waveform, sample_rate = res, 16000
+    waveform, sample_rate = torch.tensor(res), 16000
     waveform = waveform.to(device)
     print(waveform)
 

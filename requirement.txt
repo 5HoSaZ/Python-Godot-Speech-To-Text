@@ -1,7 +1,9 @@
+ipywidgets
 numpy
 pandas
 torch
 torchaudio
+pyaudio
 datasets
 transformers[torch]
 librosa

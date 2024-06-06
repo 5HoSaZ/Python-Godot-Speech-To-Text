@@ -5,6 +5,7 @@ torch
 torchaudio
 pyaudio
 datasets
+evaluate
 transformers[torch]
 librosa
 jiwer

@@ -9,3 +9,4 @@ evaluate
 transformers[torch]
 librosa
 jiwer
+phunspell

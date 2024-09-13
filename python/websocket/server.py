@@ -7,26 +7,26 @@ PORT = 8765
 connected = set()
 
 
-# create handler for each connection
+# Create handler for each connection
 async def handler(websocket, path):
     try:
         client_name = await websocket.recv()
-        client_name = websocket.remote_address
         connected.add(websocket)
         print(f"{client_name} has connected to the server")
 
         async for msg in websocket:
-            print(f"{client_name}: {msg}")
-
-            for conn in connected:
-                if conn != websocket:
-                    await conn.send(f"{client_name}: {msg}")
+            websockets.broadcast(connected, msg)
 
     except websockets.exceptions.ConnectionClosed:
+        connected.remove(websocket)
         print(f"{client_name} has disconnected")
 
 
-start_server = websockets.serve(handler, "localhost", PORT)
+async def main():
+    async with websockets.serve(handler, "localhost", PORT):
+        print(f"Server started at {PORT}")
+        await asyncio.get_running_loop().create_future()  # run forever
 
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+
+if __name__ == "__main__":
+    asyncio.run(main())

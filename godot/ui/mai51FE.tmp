@@ -1,0 +1,253 @@
+[gd_scene load_steps=9 format=3 uid="uid://3mj6loxsdhqo"]
+
+[ext_resource type="Theme" uid="uid://b8g8kbg8v1jss" path="res://assets/resources/main_control.tres" id="1_0ekj5"]
+[ext_resource type="PackedScene" uid="uid://b1s38f850ahr1" path="res://audio/audio_capture.tscn" id="1_8p87a"]
+[ext_resource type="PackedScene" uid="uid://7qmpvrsaighs" path="res://websocket/web_socket_client.tscn" id="2_4xr5w"]
+[ext_resource type="Script" path="res://ui/main_control.gd" id="2_b8u4u"]
+[ext_resource type="Script" path="res://ui/mic_option.gd" id="4_fmnfy"]
+[ext_resource type="Script" path="res://audio/audio_analyser.gd" id="6_5kbey"]
+[ext_resource type="PackedScene" uid="uid://o7hcofgkuwos" path="res://audio/audio_analyser.tscn" id="7_2fs1f"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_n06vs"]
+font_size = 25
+
+[node name="MainControl" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_0ekj5")
+script = ExtResource("2_b8u4u")
+metadata/_edit_lock_ = true
+
+[node name="AudioCapture" parent="." instance=ExtResource("1_8p87a")]
+
+[node name="RecordPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="WebSocketClient" parent="." instance=ExtResource("2_4xr5w")]
+
+[node name="LeftGUI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 648.0
+
+[node name="ColorRect" type="ColorRect" parent="LeftGUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.145098, 0.196078, 0.219608, 0.384314)
+
+[node name="Margin" type="MarginContainer" parent="LeftGUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="AudioOption" type="VBoxContainer" parent="LeftGUI/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+text = "Options"
+label_settings = SubResource("LabelSettings_n06vs")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="MicOption" type="HBoxContainer" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+script = ExtResource("4_fmnfy")
+
+[node name="Label" type="Label" parent="LeftGUI/Margin/AudioOption/MicOption"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Current Microphone"
+
+[node name="MicOptionButton" type="OptionButton" parent="LeftGUI/Margin/AudioOption/MicOption"]
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 2
+clip_text = true
+
+[node name="HSeparator2" type="HSeparator" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="SampleControl" type="HBoxContainer" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LeftGUI/Margin/AudioOption/SampleControl"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Samples"
+
+[node name="SpinBox" type="SpinBox" parent="LeftGUI/Margin/AudioOption/SampleControl"]
+custom_minimum_size = Vector2(120, 30)
+layout_direction = 2
+layout_mode = 2
+min_value = 1.0
+max_value = 50.0
+value = 10.0
+alignment = 1
+
+[node name="AmpControl" type="HBoxContainer" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LeftGUI/Margin/AudioOption/AmpControl"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Amplification
+"
+
+[node name="SpinBox" type="SpinBox" parent="LeftGUI/Margin/AudioOption/AmpControl"]
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 2
+max_value = 5.0
+step = 0.2
+value = 1.0
+alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RecordButton" type="Button" parent="LeftGUI/Margin/AudioOption/HBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Record"
+
+[node name="PlayButton" type="Button" parent="LeftGUI/Margin/AudioOption/HBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Play"
+
+[node name="SaveRecoding" type="HBoxContainer" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="LeftGUI/Margin/AudioOption/SaveRecoding"]
+layout_mode = 2
+text = "Save to"
+
+[node name="LineEdit" type="LineEdit" parent="LeftGUI/Margin/AudioOption/SaveRecoding"]
+clip_contents = true
+custom_minimum_size = Vector2(160, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "recording (.wav)"
+
+[node name="SaveButton" type="Button" parent="LeftGUI/Margin/AudioOption"]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save Recording
+"
+
+[node name="HSeparator4" type="HSeparator" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="PlaySavedRecording" type="HBoxContainer" parent="LeftGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="Button" type="Label" parent="LeftGUI/Margin/AudioOption/PlaySavedRecording"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Play from"
+
+[node name="OptionButton" type="OptionButton" parent="LeftGUI/Margin/AudioOption/PlaySavedRecording"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+
+[node name="RightGUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 752.0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="ColorRect" type="ColorRect" parent="RightGUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.145098, 0.196078, 0.219608, 0.384314)
+
+[node name="Margin" type="MarginContainer" parent="RightGUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="AudioOption" type="VBoxContainer" parent="RightGUI/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ProcessingLabel" type="Label" parent="RightGUI/Margin/AudioOption"]
+layout_mode = 2
+text = "Processing
+"
+label_settings = SubResource("LabelSettings_n06vs")
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="RightGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="ProcessingOption" type="HBoxContainer" parent="RightGUI/Margin/AudioOption"]
+layout_mode = 2
+script = ExtResource("6_5kbey")
+
+[node name="Label" type="Label" parent="RightGUI/Margin/AudioOption/ProcessingOption"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Set Processing"
+
+[node name="CheckButton" type="CheckButton" parent="RightGUI/Margin/AudioOption/ProcessingOption"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Off"
+
+[node name="AudioAnalyser" parent="RightGUI/Margin/AudioOption" instance=ExtResource("7_2fs1f")]
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="RightGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="RightGUI/Margin/AudioOption"]
+layout_mode = 2
+
+[node name="ConsoleLogs" type="Label" parent="RightGUI/Margin/AudioOption"]
+layout_mode = 2
+text = "Console
+"
+label_settings = SubResource("LabelSettings_n06vs")
+horizontal_alignment = 1
+
+[connection signal="item_selected" from="LeftGUI/Margin/AudioOption/MicOption/MicOptionButton" to="LeftGUI/Margin/AudioOption/MicOption" method="_on_option_button_item_selected"]

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3hw1j2d1dlwu"]
+
+[ext_resource type="PackedScene" uid="uid://7qmpvrsaighs" path="res://websocket/web_socket_client.tscn" id="2_6cd7p"]
+[ext_resource type="PackedScene" uid="uid://b1s38f850ahr1" path="res://audio/audio_controller.tscn" id="2_6mrmd"]
+
+[node name="Main" type="Node"]
+
+[node name="WebSocketClient" parent="." instance=ExtResource("2_6cd7p")]
+
+[node name="AudioController" parent="." instance=ExtResource("2_6mrmd")]
+buffer_frames = 1
+
+[connection signal="message_received" from="WebSocketClient" to="WebSocketClient" method="_on_message_received"]
+[connection signal="capture_buffer" from="AudioController" to="WebSocketClient" method="_on_audio_controller_capture_buffer"]

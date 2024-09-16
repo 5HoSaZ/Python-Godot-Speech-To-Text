@@ -1,0 +1,16 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://b8g8kbg8v1jss"]
+
+[ext_resource type="FontFile" uid="uid://bkvhlrdshxp80" path="res://assets/fonts/ibm_vga/Px437_IBM_VGA_8x16.ttf" id="1_4bfst"]
+[ext_resource type="FontFile" uid="uid://7sx0kjlspeix" path="res://assets/fonts/kenny/Kenney Future Narrow.ttf" id="2_gnjp4"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_ihrms"]
+color = Color(0.804743, 0.804743, 0.804743, 1)
+thickness = 2
+
+[resource]
+default_font = ExtResource("2_gnjp4")
+default_font_size = 17
+HSeparator/constants/separation = 10
+HSeparator/styles/separator = SubResource("StyleBoxLine_ihrms")
+RichTextLabel/font_sizes/normal_font_size = 16
+RichTextLabel/fonts/normal_font = ExtResource("1_4bfst")

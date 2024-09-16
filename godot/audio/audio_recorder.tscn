@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=3 uid="uid://lyplfb3bi7an"]
+
+[ext_resource type="PackedScene" uid="uid://dytye1t2s20f3" path="res://ui/common_gui_container.tscn" id="1_3mk05"]
+
+[node name="AudioRecorder" instance=ExtResource("1_3mk05")]
+
+[node name="Label" parent="Content" index="0"]
+text = "Record
+"
+
+[node name="PlaySavedRecording" type="HBoxContainer" parent="Content" index="2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/PlaySavedRecording" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Play from"
+
+[node name="PlaySavedOption" type="OptionButton" parent="Content/PlaySavedRecording" index="1"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Content" index="3"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RecordButton" type="Button" parent="Content/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Record"
+
+[node name="PlayButton" type="Button" parent="Content/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Play"
+
+[node name="SaveRecoding" type="HBoxContainer" parent="Content" index="4"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Content/SaveRecoding" index="0"]
+layout_mode = 2
+text = "Save to"
+
+[node name="LineEdit" type="LineEdit" parent="Content/SaveRecoding" index="1"]
+clip_contents = true
+custom_minimum_size = Vector2(160, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "recording (.wav)"
+
+[node name="SaveButton" type="Button" parent="Content" index="5"]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save Recording
+"

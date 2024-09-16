@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1s38f850ahr1"]
+
+[ext_resource type="Script" path="res://audio/audio_capture.gd" id="1_1eduu"]
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_1jen8"]
+
+[node name="AudioCapture" type="AudioStreamPlayer"]
+stream = SubResource("AudioStreamMicrophone_1jen8")
+autoplay = true
+bus = &"Capture"
+script = ExtResource("1_1eduu")

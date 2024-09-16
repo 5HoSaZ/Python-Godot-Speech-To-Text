@@ -1,0 +1,274 @@
+[gd_scene load_steps=9 format=3 uid="uid://c0e8fak02o7mx"]
+
+[ext_resource type="Script" path="res://examples/sample_scene.gd" id="1"]
+[ext_resource type="Theme" uid="uid://8i8jege2yuim" path="res://assets/resources/ui_theme.tres" id="2"]
+[ext_resource type="Texture2D" uid="uid://bk0xguxyx84ix" path="res://other/bar/background.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bn1gomq6koild" path="res://other/bar/foreground.png" id="4"]
+[ext_resource type="Script" path="res://examples/live_audio.gd" id="5"]
+[ext_resource type="Script" path="res://examples/device_selection.gd" id="6"]
+[ext_resource type="Texture2D" uid="uid://donknl7e4ecet" path="res://other/background.png" id="7"]
+
+[sub_resource type="AudioStreamMicrophone" id="1"]
+
+[node name="sample_scene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="background" type="TextureRect" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("7")
+expand_mode = 1
+
+[node name="content" type="MarginContainer" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("2")
+script = ExtResource("1")
+
+[node name="mic_input" type="AudioStreamPlayer" parent="content"]
+stream = SubResource("1")
+autoplay = true
+
+[node name="recording_player" type="AudioStreamPlayer" parent="content"]
+
+[node name="ui" type="HBoxContainer" parent="content"]
+layout_mode = 2
+
+[node name="recording_controls" type="VBoxContainer" parent="content/ui"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="device_selection" type="OptionButton" parent="content/ui/recording_controls"]
+layout_mode = 2
+clip_text = true
+script = ExtResource("6")
+
+[node name="sep2" type="HSeparator" parent="content/ui/recording_controls"]
+layout_mode = 2
+
+[node name="record_button" type="Button" parent="content/ui/recording_controls"]
+layout_mode = 2
+text = "Start recording"
+
+[node name="play_button" type="Button" parent="content/ui/recording_controls"]
+layout_mode = 2
+text = "Play audio"
+
+[node name="sep" type="HSeparator" parent="content/ui/recording_controls"]
+layout_mode = 2
+
+[node name="save_name" type="LineEdit" parent="content/ui/recording_controls"]
+layout_mode = 2
+placeholder_text = "Save name"
+
+[node name="save_button" type="Button" parent="content/ui/recording_controls"]
+layout_mode = 2
+text = "save to wav"
+
+[node name="sep" type="VSeparator" parent="content/ui"]
+layout_mode = 2
+
+[node name="live_audio" type="VBoxContainer" parent="content/ui"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("5")
+
+[node name="monitors" type="HBoxContainer" parent="content/ui/live_audio"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="volume_monitor" type="VBoxContainer" parent="content/ui/live_audio/monitors"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="volume_bar" type="TextureProgressBar" parent="content/ui/live_audio/monitors/volume_monitor"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.01
+fill_mode = 3
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_under = ExtResource("3")
+texture_progress = ExtResource("4")
+
+[node name="volume_value" type="Label" parent="content/ui/live_audio/monitors/volume_monitor"]
+layout_mode = 2
+text = "0.0db"
+horizontal_alignment = 1
+
+[node name="volume_label" type="Label" parent="content/ui/live_audio/monitors/volume_monitor"]
+layout_mode = 2
+text = "Approx. Volume"
+horizontal_alignment = 1
+
+[node name="frequency_monitor" type="VBoxContainer" parent="content/ui/live_audio/monitors"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="bars" type="VBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="20000" type="HBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor/bars"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="bar" type="ColorRect" parent="content/ui/live_audio/monitors/frequency_monitor/bars/20000"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor/bars/20000"]
+layout_mode = 2
+text = "20 kz"
+
+[node name="10000" type="HBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor/bars"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="bar" type="ColorRect" parent="content/ui/live_audio/monitors/frequency_monitor/bars/10000"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor/bars/10000"]
+layout_mode = 2
+text = "10 kz"
+
+[node name="5000" type="HBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor/bars"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="bar" type="ColorRect" parent="content/ui/live_audio/monitors/frequency_monitor/bars/5000"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor/bars/5000"]
+layout_mode = 2
+text = "5 kz"
+
+[node name="2500" type="HBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor/bars"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="bar" type="ColorRect" parent="content/ui/live_audio/monitors/frequency_monitor/bars/2500"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor/bars/2500"]
+layout_mode = 2
+text = "2.5 kz"
+
+[node name="1000" type="HBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor/bars"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="bar" type="ColorRect" parent="content/ui/live_audio/monitors/frequency_monitor/bars/1000"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor/bars/1000"]
+layout_mode = 2
+text = "1 kz"
+
+[node name="500" type="HBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor/bars"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="bar" type="ColorRect" parent="content/ui/live_audio/monitors/frequency_monitor/bars/500"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor/bars/500"]
+layout_mode = 2
+text = "500 hz"
+
+[node name="250" type="HBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor/bars"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="bar" type="ColorRect" parent="content/ui/live_audio/monitors/frequency_monitor/bars/250"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor/bars/250"]
+layout_mode = 2
+text = "250 hz"
+
+[node name="100" type="HBoxContainer" parent="content/ui/live_audio/monitors/frequency_monitor/bars"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="bar" type="ColorRect" parent="content/ui/live_audio/monitors/frequency_monitor/bars/100"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor/bars/100"]
+layout_mode = 2
+text = "100 hz"
+
+[node name="frequency_label" type="Label" parent="content/ui/live_audio/monitors/frequency_monitor"]
+layout_mode = 2
+text = "Frequency strength"
+horizontal_alignment = 1
+
+[node name="sep" type="HSeparator" parent="content/ui/live_audio"]
+layout_mode = 2
+
+[node name="controls" type="HBoxContainer" parent="content/ui/live_audio"]
+layout_mode = 2
+
+[node name="samples_control" type="HBoxContainer" parent="content/ui/live_audio/controls"]
+layout_mode = 2
+
+[node name="samples_label" type="Label" parent="content/ui/live_audio/controls/samples_control"]
+layout_mode = 2
+text = "Samples"
+horizontal_alignment = 1
+
+[node name="samples_spinbox" type="SpinBox" parent="content/ui/live_audio/controls/samples_control"]
+layout_mode = 2
+min_value = 1.0
+max_value = 50.0
+value = 10.0
+rounded = true
+
+[node name="amplification_control" type="HBoxContainer" parent="content/ui/live_audio/controls"]
+layout_mode = 2
+
+[node name="amp_label" type="Label" parent="content/ui/live_audio/controls/amplification_control"]
+layout_mode = 2
+text = "Amplification"
+horizontal_alignment = 1
+
+[node name="amp_spinbox" type="SpinBox" parent="content/ui/live_audio/controls/amplification_control"]
+layout_mode = 2
+max_value = 5.0
+step = 0.2
+value = 1.0
+
+[connection signal="item_selected" from="content/ui/recording_controls/device_selection" to="content/ui/recording_controls/device_selection" method="_on_device_selection_item_selected"]
+[connection signal="pressed" from="content/ui/recording_controls/record_button" to="content" method="_on_record_button_pressed"]
+[connection signal="pressed" from="content/ui/recording_controls/play_button" to="content" method="_on_play_button_pressed"]
+[connection signal="pressed" from="content/ui/recording_controls/save_button" to="content" method="_on_save_button_pressed"]
+[connection signal="value_changed" from="content/ui/live_audio/controls/amplification_control/amp_spinbox" to="content" method="_on_amp_spinbox_value_changed"]

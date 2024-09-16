@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://c0e8xmwamei6n"]
+
+[ext_resource type="FontFile" uid="uid://7sx0kjlspeix" path="res://assets/fonts/kenny/Kenney Future Narrow.ttf" id="1_ojtdk"]
+
+[resource]
+font = ExtResource("1_ojtdk")
+font_size = 25

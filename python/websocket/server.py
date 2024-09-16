@@ -1,25 +1,38 @@
 import asyncio
 import websockets
 
+
+IP = "localhost"
 PORT = 8765
 
 # List of connected clients
 connected = set()
 
 
+# def write_to_wav(bytes, filename="myfile.ogg"):
+#     with wave.open(filename, "wb") as wf:
+#         wf.setnchannels(1)  # mono
+#         wf.setsampwidth(2)  # 1 bytes per sample
+#         wf.setframerate(44100)
+#         wf.writeframes(bytes)
+
+
 # Create handler for each connection
 async def handler(websocket, path):
     try:
-        client_name = await websocket.recv()
         connected.add(websocket)
-        print(f"{client_name} has connected to the server")
+        print("A client has connected")
 
         async for msg in websocket:
-            websockets.broadcast(connected, msg)
+            print(f"Message from client: {msg}")
+            await websocket.send(f"Got your message: {msg}")
 
-    except websockets.exceptions.ConnectionClosed:
+    except websockets.exceptions.ConnectionClosed as e:
+        print(e)
+
+    finally:
+        print("disconnected")
         connected.remove(websocket)
-        print(f"{client_name} has disconnected")
 
 
 async def main():

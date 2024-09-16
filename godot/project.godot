@@ -11,10 +11,11 @@ config_version=5
 [application]
 
 config/name="Text-to-Sign UI"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://ui/main_control.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [audio]
 
+buses/default_bus_layout="res://assets/resources/default_bus_layout.tres"
 driver/enable_input=true

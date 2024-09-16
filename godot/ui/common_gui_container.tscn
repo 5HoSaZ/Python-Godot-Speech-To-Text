@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://dytye1t2s20f3"]
+
+[ext_resource type="LabelSettings" uid="uid://c0e8xmwamei6n" path="res://assets/resources/option_header.tres" id="1_ewyxp"]
+
+[node name="CommonGUIContainer" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -704.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 2
+color = Color(0.2112, 0.45312, 0.48, 1)
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Content"]
+layout_mode = 2
+label_settings = ExtResource("1_ewyxp")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Content"]
+layout_mode = 2

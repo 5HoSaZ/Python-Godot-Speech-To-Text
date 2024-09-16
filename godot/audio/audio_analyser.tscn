@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=3 uid="uid://o7hcofgkuwos"]
+
+[ext_resource type="PackedScene" uid="uid://dytye1t2s20f3" path="res://ui/common_gui_container.tscn" id="1_08jbo"]
+[ext_resource type="Script" path="res://audio/audio_analyser.gd" id="1_j1djc"]
+[ext_resource type="Shader" path="res://assets/resources/spectrum.gdshader" id="3_bkr4t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x1722"]
+shader = ExtResource("3_bkr4t")
+shader_parameter/freq_data = PackedFloat32Array()
+
+[node name="AudioAnalyser" instance=ExtResource("1_08jbo")]
+script = ExtResource("1_j1djc")
+
+[node name="Label" parent="Content" index="0"]
+text = "Processing"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Content" index="2"]
+layout_mode = 2
+
+[node name="VolumeMonitor" type="VBoxContainer" parent="Content/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Content/HBoxContainer/VolumeMonitor" index="0"]
+layout_mode = 2
+text = "Volume"
+horizontal_alignment = 1
+
+[node name="VolumeBar" type="ProgressBar" parent="Content/HBoxContainer/VolumeMonitor" index="1"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+max_value = 1.0
+value = 1.0
+fill_mode = 3
+show_percentage = false
+
+[node name="VolumeValue" type="Label" parent="Content/HBoxContainer/VolumeMonitor" index="2"]
+layout_mode = 2
+text = "0.0 db"
+horizontal_alignment = 1
+
+[node name="SpectrumMonitor" type="VBoxContainer" parent="Content/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Content/HBoxContainer/SpectrumMonitor" index="0"]
+layout_mode = 2
+text = "Spectrum"
+horizontal_alignment = 1
+
+[node name="LEDS" type="ColorRect" parent="Content/HBoxContainer/SpectrumMonitor" index="1"]
+material = SubResource("ShaderMaterial_x1722")
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

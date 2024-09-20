@@ -18,7 +18,6 @@ color = Color(0.2112, 0.45312, 0.48, 1)
 
 [node name="Content" type="VBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 16
 
 [node name="Label" type="Label" parent="Content"]
 layout_mode = 2

@@ -36,20 +36,7 @@ size_flags_vertical = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_fcyhn")
 scroll_following = true
 
-[node name="TextField" type="HBoxContainer" parent="Content" index="4"]
-layout_mode = 2
-
-[node name="LineEdit" type="LineEdit" parent="Content/TextField" index="0"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SendButton" type="Button" parent="Content/TextField" index="1"]
-custom_minimum_size = Vector2(60, 30)
-layout_mode = 2
-text = "Send"
-
 [connection signal="connected_to_server" from="WebSocketClient" to="." method="_on_client_connected_to_server"]
 [connection signal="connection_closed" from="WebSocketClient" to="." method="_on_client_connection_closed"]
 [connection signal="message_received" from="WebSocketClient" to="." method="_on_client_message_received"]
 [connection signal="toggled" from="Content/HostField/ConnectButton" to="." method="_on_connect_button_toggled"]
-[connection signal="pressed" from="Content/TextField/SendButton" to="." method="_on_send_button_pressed"]

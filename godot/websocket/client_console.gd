@@ -29,12 +29,12 @@ func _on_client_message_received(message) -> void:
 	info("%s" % message)
 
 
-func _on_send_button_pressed() -> void:
-	if line_edit.text == "":
-		return
-	info("Sending message: %s" % [line_edit.text])
-	client.send(line_edit.text)
-	line_edit.text = ""
+#func _on_send_button_pressed() -> void:
+	#if line_edit.text == "":
+		#return
+	#info("Sending message: %s" % [line_edit.text])
+	#client.send(line_edit.text)
+	#line_edit.text = ""
 
 
 func _on_connect_button_toggled(toggled_on) -> void:
@@ -48,3 +48,8 @@ func _on_connect_button_toggled(toggled_on) -> void:
 	if err != OK:
 		info("Error connecting to host: %s" % [host.text])
 		return
+
+
+func _on_audio_capture_frames_captured(frames: PackedFloat32Array) -> void:
+	if client.last_state == WebSocketPeer.STATE_OPEN:
+		client.send(frames)

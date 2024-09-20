@@ -14,3 +14,4 @@ HSeparator/constants/separation = 10
 HSeparator/styles/separator = SubResource("StyleBoxLine_ihrms")
 RichTextLabel/font_sizes/normal_font_size = 16
 RichTextLabel/fonts/normal_font = ExtResource("1_4bfst")
+VBoxContainer/constants/separation = 16

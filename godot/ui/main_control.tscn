@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://3mj6loxsdhqo"]
+[gd_scene load_steps=10 format=3 uid="uid://3mj6loxsdhqo"]
 
 [ext_resource type="Theme" uid="uid://b8g8kbg8v1jss" path="res://assets/resources/main_control.tres" id="1_0ekj5"]
 [ext_resource type="PackedScene" uid="uid://b1s38f850ahr1" path="res://audio/audio_capture.tscn" id="1_8p87a"]
 [ext_resource type="Script" path="res://ui/main_control.gd" id="2_b8u4u"]
 [ext_resource type="Script" path="res://ui/mic_option.gd" id="4_fmnfy"]
 [ext_resource type="PackedScene" uid="uid://dytye1t2s20f3" path="res://ui/common_gui_container.tscn" id="4_qipqv"]
+[ext_resource type="Script" path="res://ui/options.gd" id="5_pnjq0"]
 [ext_resource type="PackedScene" uid="uid://o7hcofgkuwos" path="res://audio/audio_analyser.tscn" id="5_y5haa"]
 [ext_resource type="PackedScene" uid="uid://lyplfb3bi7an" path="res://audio/audio_recorder.tscn" id="6_7iaat"]
 [ext_resource type="PackedScene" uid="uid://dpl887j0d4nbi" path="res://websocket/client_console.tscn" id="8_cp405"]
@@ -52,10 +53,10 @@ theme_override_constants/margin_bottom = 20
 
 [node name="Content" type="VBoxContainer" parent="LeftGUI/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 16
 
 [node name="Options" parent="LeftGUI/Margin/Content" instance=ExtResource("4_qipqv")]
 layout_mode = 2
+script = ExtResource("5_pnjq0")
 
 [node name="Label" parent="LeftGUI/Margin/Content/Options/Content" index="0"]
 text = "Options"
@@ -84,10 +85,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Set Processing"
 
-[node name="CheckButton" type="CheckButton" parent="LeftGUI/Margin/Content/Options/Content/ProcessingOption"]
+[node name="ProcessButton" type="CheckButton" parent="LeftGUI/Margin/Content/Options/Content/ProcessingOption"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-text = "Off"
+button_pressed = true
+text = "On"
 
 [node name="SampleControl" type="HBoxContainer" parent="LeftGUI/Margin/Content/Options/Content" index="4"]
 layout_mode = 2
@@ -162,7 +164,6 @@ theme_override_constants/margin_bottom = 20
 
 [node name="Content" type="VBoxContainer" parent="RightGUI/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="AudioAnalyser" parent="RightGUI/Margin/Content" instance=ExtResource("5_y5haa")]
 layout_mode = 2
@@ -176,7 +177,10 @@ layout_mode = 2
 [node name="AudioRecorder" parent="RightGUI/Margin/Content" instance=ExtResource("6_7iaat")]
 layout_mode = 2
 
-[connection signal="item_selected" from="LeftGUI/Margin/Content/Options/Content/MicOption/MicOptionButton" to="LeftGUI/Margin/Content/Options/Content/MicOption" method="_on_option_button_item_selected"]
+[connection signal="frames_captured" from="AudioCapture" to="LeftGUI/Margin/Content/ClientConsole" method="_on_audio_capture_frames_captured"]
+[connection signal="item_selected" from="LeftGUI/Margin/Content/Options/Content/MicOption/MicOptionButton" to="LeftGUI/Margin/Content/Options" method="_on_mic_option_button_item_selected"]
+[connection signal="toggled" from="LeftGUI/Margin/Content/Options/Content/ProcessingOption/ProcessButton" to="AudioCapture" method="_on_process_button_toggled"]
+[connection signal="toggled" from="LeftGUI/Margin/Content/Options/Content/ProcessingOption/ProcessButton" to="LeftGUI/Margin/Content/Options" method="_on_process_button_toggled"]
 [connection signal="value_changed" from="LeftGUI/Margin/Content/Options/Content/AmpControl/AmpSpinBox" to="AudioCapture" method="_on_amp_spin_box_value_changed"]
 
 [editable path="LeftGUI/Margin/Content/Options"]

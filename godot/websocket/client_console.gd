@@ -50,6 +50,6 @@ func _on_connect_button_toggled(toggled_on) -> void:
 		return
 
 
-func _on_audio_capture_frames_captured(frames: PackedFloat32Array) -> void:
+func _on_audio_capture_frames_captured(frames) -> void:
 	if client.last_state == WebSocketPeer.STATE_OPEN:
 		client.send(frames)

@@ -1,5 +1,2 @@
-python/modules/models/
-python/notebooks/realtime.ipynb
-python/notebooks/test_mic.ipynb
-python/notebooks/test.wav
-python/notebooks/test0.wav
+python/models/
+python/notebooks/

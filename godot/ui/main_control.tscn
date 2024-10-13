@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://ui/mic_option.gd" id="4_fmnfy"]
 [ext_resource type="PackedScene" uid="uid://dytye1t2s20f3" path="res://ui/common_gui_container.tscn" id="4_qipqv"]
 [ext_resource type="Script" path="res://ui/options.gd" id="5_pnjq0"]
-[ext_resource type="PackedScene" uid="uid://o7hcofgkuwos" path="res://audio/audio_analyser.tscn" id="5_y5haa"]
+[ext_resource type="PackedScene" uid="uid://o7hcofgkuwos" path="res://audio/audio_processor.tscn" id="5_y5haa"]
 [ext_resource type="PackedScene" uid="uid://lyplfb3bi7an" path="res://audio/audio_recorder.tscn" id="6_7iaat"]
 [ext_resource type="PackedScene" uid="uid://dpl887j0d4nbi" path="res://websocket/client_console.tscn" id="8_cp405"]
 
@@ -76,40 +76,22 @@ custom_minimum_size = Vector2(120, 30)
 layout_mode = 2
 clip_text = true
 
-[node name="ProcessingOption" type="HBoxContainer" parent="LeftGUI/Margin/Content/Options/Content" index="3"]
+[node name="MuteOption" type="HBoxContainer" parent="LeftGUI/Margin/Content/Options/Content" index="3"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="LeftGUI/Margin/Content/Options/Content/ProcessingOption"]
+[node name="Label" type="Label" parent="LeftGUI/Margin/Content/Options/Content/MuteOption"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Set Processing"
+text = "Mute"
 
-[node name="ProcessButton" type="CheckButton" parent="LeftGUI/Margin/Content/Options/Content/ProcessingOption"]
+[node name="MuteButton" type="CheckButton" parent="LeftGUI/Margin/Content/Options/Content/MuteOption"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 button_pressed = true
 text = "On"
 
-[node name="SampleControl" type="HBoxContainer" parent="LeftGUI/Margin/Content/Options/Content" index="4"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="LeftGUI/Margin/Content/Options/Content/SampleControl"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Samples"
-
-[node name="SpinBox" type="SpinBox" parent="LeftGUI/Margin/Content/Options/Content/SampleControl"]
-custom_minimum_size = Vector2(120, 30)
-layout_direction = 2
-layout_mode = 2
-min_value = 1.0
-max_value = 50.0
-value = 10.0
-alignment = 1
-
-[node name="AmpControl" type="HBoxContainer" parent="LeftGUI/Margin/Content/Options/Content" index="5"]
+[node name="AmpControl" type="HBoxContainer" parent="LeftGUI/Margin/Content/Options/Content" index="4"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="LeftGUI/Margin/Content/Options/Content/AmpControl"]
@@ -125,6 +107,25 @@ layout_mode = 2
 max_value = 5.0
 step = 0.2
 value = 1.0
+alignment = 1
+
+[node name="ThresholdControl" type="HBoxContainer" parent="LeftGUI/Margin/Content/Options/Content" index="5"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LeftGUI/Margin/Content/Options/Content/ThresholdControl"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Amp Threshold
+"
+
+[node name="SpinBox" type="SpinBox" parent="LeftGUI/Margin/Content/Options/Content/ThresholdControl"]
+custom_minimum_size = Vector2(120, 30)
+layout_direction = 2
+layout_mode = 2
+max_value = 0.01
+step = 0.001
+value = 0.005
 alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="LeftGUI/Margin/Content"]
@@ -165,7 +166,7 @@ theme_override_constants/margin_bottom = 20
 [node name="Content" type="VBoxContainer" parent="RightGUI/Margin"]
 layout_mode = 2
 
-[node name="AudioAnalyser" parent="RightGUI/Margin/Content" instance=ExtResource("5_y5haa")]
+[node name="AudioProcessor" parent="RightGUI/Margin/Content" instance=ExtResource("5_y5haa")]
 layout_mode = 2
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="RightGUI/Margin/Content"]
@@ -177,10 +178,11 @@ layout_mode = 2
 [node name="AudioRecorder" parent="RightGUI/Margin/Content" instance=ExtResource("6_7iaat")]
 layout_mode = 2
 
-[connection signal="frames_captured" from="AudioCapture" to="LeftGUI/Margin/Content/ClientConsole" method="_on_audio_capture_frames_captured"]
 [connection signal="item_selected" from="LeftGUI/Margin/Content/Options/Content/MicOption/MicOptionButton" to="LeftGUI/Margin/Content/Options" method="_on_mic_option_button_item_selected"]
-[connection signal="toggled" from="LeftGUI/Margin/Content/Options/Content/ProcessingOption/ProcessButton" to="AudioCapture" method="_on_process_button_toggled"]
-[connection signal="toggled" from="LeftGUI/Margin/Content/Options/Content/ProcessingOption/ProcessButton" to="LeftGUI/Margin/Content/Options" method="_on_process_button_toggled"]
+[connection signal="toggled" from="LeftGUI/Margin/Content/Options/Content/MuteOption/MuteButton" to="AudioCapture" method="_on_mute_button_toggled"]
+[connection signal="toggled" from="LeftGUI/Margin/Content/Options/Content/MuteOption/MuteButton" to="LeftGUI/Margin/Content/Options" method="_on_mute_button_toggled"]
 [connection signal="value_changed" from="LeftGUI/Margin/Content/Options/Content/AmpControl/AmpSpinBox" to="AudioCapture" method="_on_amp_spin_box_value_changed"]
+[connection signal="value_changed" from="LeftGUI/Margin/Content/Options/Content/ThresholdControl/SpinBox" to="RightGUI/Margin/Content/AudioProcessor" method="_on_spin_box_value_changed"]
+[connection signal="frames_captured" from="RightGUI/Margin/Content/AudioProcessor" to="LeftGUI/Margin/Content/ClientConsole" method="_on_audio_processor_frames_captured"]
 
 [editable path="LeftGUI/Margin/Content/Options"]

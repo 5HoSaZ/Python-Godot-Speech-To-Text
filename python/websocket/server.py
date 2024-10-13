@@ -14,13 +14,13 @@ RATE = 44100
 HOST = "localhost"
 PORT = 8765
 
-model_path = os.path.abspath("./python/models/vosk-model-en-us-0.22")
-recase_path = os.path.abspath("./python/models/vosk-recasepunc-en-0.22/recasepunc.py")
-recase_ckpt = os.path.abspath("./python/models/vosk-recasepunc-en-0.22/checkpoint")
+# model_path = os.path.abspath("./python/models/vosk-model-en-us-0.22")
+# recase_path = os.path.abspath("./python/models/vosk-recasepunc-en-0.22/recasepunc.py")
+# recase_ckpt = os.path.abspath("./python/models/vosk-recasepunc-en-0.22/checkpoint")
 
-model = Model(model_path=model_path)
-rec = KaldiRecognizer(model, RATE)
-print("Model loaded")
+# model = Model(model_path=model_path)
+# rec = KaldiRecognizer(model, RATE)
+# print("Model loaded")
 
 p = pyaudio.PyAudio()
 player = p.open(
@@ -57,27 +57,26 @@ async def audio_channel(websocket: WebSocketCLient):
         print("Listening...")
         async for frames in websocket:
             # Audio frames should be a byte of int16
-            # frames = np.frombuffer(frames, dtype=np.int16)
-            audio_queue.put_nowait(frames)
+            audio_queue.put_nowait(frames[8:])
         audio_queue.put_nowait(None)
 
     async def audio_process():
-        try:
-            while True:
-                data = await audio_queue.get()
-                if data is None:
-                    break
-                if rec.AcceptWaveform(data):
-                    result = rec.Result()
-                    text = json.loads(result)["text"]
-                    print(f"Recognized: {text}")
-                else:
-                    partial_result = rec.PartialResult()
-                    print(f"Partial: {json.loads(partial_result)['partial']}")
-                # data = np.frombuffer(data, dtype=np.int16)
-                # player.write(data, CHUNK)
-        except KeyboardInterrupt:
-            print("Terminating...")
+        while True:
+            data = await audio_queue.get()
+            if data is None:
+                break
+            # if rec.AcceptWaveform(data):
+            #     result = rec.Result()
+            #     text = json.loads(result)["text"]
+            #     print(f"Recognized: {text}")
+            # else:
+            #     partial_result = rec.PartialResult()
+            #     print(f"Partial: {json.loads(partial_result)['partial']}")
+            #     await websocket.send(
+            #         f"Partial: {json.loads(partial_result)['partial']}"
+            #     )
+            data = np.frombuffer(data, dtype=np.int16)
+            player.write(data, CHUNK)
 
     await asyncio.gather(audio_receiver(), audio_process())
 
@@ -89,4 +88,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Terminating...")

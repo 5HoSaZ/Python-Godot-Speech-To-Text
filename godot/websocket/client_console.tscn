@@ -25,7 +25,7 @@ text = "ws://localhost:8765"
 placeholder_text = "please input host url"
 
 [node name="ConnectButton" type="Button" parent="Content/HostField" index="1"]
-custom_minimum_size = Vector2(80, 30)
+custom_minimum_size = Vector2(100, 30)
 layout_mode = 2
 toggle_mode = true
 text = "Connect"

@@ -29,27 +29,25 @@ func _on_client_message_received(message) -> void:
 	info("%s" % message)
 
 
-#func _on_send_button_pressed() -> void:
-	#if line_edit.text == "":
-		#return
-	#info("Sending message: %s" % [line_edit.text])
-	#client.send(line_edit.text)
-	#line_edit.text = ""
-
-
 func _on_connect_button_toggled(toggled_on) -> void:
+	if toggled_on:
+		if host.text == "":
+			connect_button.button_pressed = false
+			info("Host url cannot be empty")
+			return
+		info("Connecting to host: %s." % [host.text])
+		var err = client.connect_to_url(host.text)
+		if err != OK:
+			info("Error connecting to host: %s" % [host.text])
+			connect_button.button_pressed = false
+			return
+		connect_button.text = "Close"
+
 	if not toggled_on:
+		connect_button.text = "Connect"
 		client.close()
-		return
-	if host.text == "":
-		return
-	info("Connecting to host: %s." % [host.text])
-	var err = client.connect_to_url(host.text)
-	if err != OK:
-		info("Error connecting to host: %s" % [host.text])
-		return
 
 
-func _on_audio_capture_frames_captured(frames) -> void:
+func _on_audio_processor_frames_captured(frames):
 	if client.last_state == WebSocketPeer.STATE_OPEN:
 		client.send(frames)

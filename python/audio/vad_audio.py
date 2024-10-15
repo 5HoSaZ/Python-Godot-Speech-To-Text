@@ -36,22 +36,23 @@ class RingBuffer:
         self.triggered = False
         self.out_frame = b""
 
-    def accept(self, frame: bytes, state: bool, target: asyncio.Queue):
+    def accept(self, frame: bytes, state: bool):
+        self.buffer.append((frame, state))
         if self.triggered is False:
-            self.buffer.append((frame, state))
             voiced = sum([s for _, s in self.buffer])
             if voiced > self.threshold:
                 self.triggered = True
                 self.out_frame += b"".join([f for f, _ in self.buffer])
         else:
             self.out_frame += frame
-            self.buffer.append((frame, state))
             unvoiced = sum([1 - s for _, s in self.buffer])
             if unvoiced > self.threshold:
                 self.triggered = False
                 self.buffer.clear()
-                target.put_nowait(self.out_frame)
+                out_bytes = self.out_frame
                 self.out_frame = b""
+                return out_bytes
+        return None
 
 
 def resample_bytes(frame: bytes, in_rate, out_rate):
@@ -95,16 +96,15 @@ class WebSocketAudio_VAD(Audio):
                 if frame == "stop":
                     break
                 next_frame = frame[8:]
-
                 # Rate: 44100 -> 16000
                 next_frame = resample_bytes(next_frame, self.SAMPLE_RATE, 16000)
-                wav_file.writeframes(next_frame)
                 self.stream.write(next_frame)
                 # VAD every 480 frame (960 bytes PCM16)
                 while len(self.stream) >= frame_length:
                     frame = self.stream.read(frame_length)
                     is_speech = self.vad.is_speech(frame, 16000)
-                    print(is_speech)
-                    self.ring_buffer.accept(frame, is_speech, self.audio_queue)
-            print("Done")
+                    res = self.ring_buffer.accept(frame, is_speech)
+                    if res:
+                        self.audio_queue.put_nowait(res)
+                        wav_file.writeframes(res)
             self.audio_queue.put_nowait("stop")

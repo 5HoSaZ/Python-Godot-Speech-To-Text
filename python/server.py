@@ -13,7 +13,7 @@ PORT = 8765
 
 
 # model_path = os.path.abspath("./python/models/vosk-model-en-us-0.22")
-# asr = ASR_VOSK(model_path, sample_rate=RATE)
+# asr = ASR_VOSK(model_path, sample_rate=16000)
 asr = ASR_WAV2VEC(sample_rate=16000)
 
 # List of connected clients
@@ -38,12 +38,14 @@ async def audio_channel(websocket: WebSocketCLient):
     audio = WebSocketAudio_VAD(websocket)
     audio_queue = audio.get_queue()
 
+    async def callback(text):
+        await websocket.send(text)
+
     async def audio_receiver():
         await audio.receive()
 
     async def audio_process():
-        # await asr.transcribe(audio_queue)
-        await asyncio.sleep(0.1)
+        await asr.transcribe(audio_queue, callback=callback)
 
     await asyncio.gather(audio_receiver(), audio_process())
 

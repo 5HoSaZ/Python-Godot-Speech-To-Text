@@ -1,5 +1,6 @@
 from .asr_interface import ASRInterface
 
+from typing import Callable
 import asyncio
 import numpy as np
 import torch
@@ -39,7 +40,7 @@ class ASR_WAV2VEC(ASRInterface):
         self.sample_rate = sample_rate
         print("Model loaded")
 
-    async def transcribe(self, audio_queue: asyncio.Queue):
+    async def transcribe(self, audio_queue: asyncio.Queue, callback: Callable = None):
         frame = b""
         duration = 0
         while True:
@@ -61,6 +62,9 @@ class ASR_WAV2VEC(ASRInterface):
             with torch.inference_mode():
                 emission, _ = self.model(frame)
             transcript = self.decoder(emission[0])
-            print(f"Recognized: {transcript}")
+            if callback is None:
+                print(f"Recognized: {transcript}")
+            else:
+                await callback(transcript)
             frame = b""
             duration = 0

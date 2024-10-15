@@ -8,14 +8,13 @@ from audio import WebsocketAudio, WebSocketAudio_VAD
 
 WebSocketCLient = websockets.WebSocketClientProtocol
 
-CHUNK = 512
-RATE = 44100
 HOST = "localhost"
 PORT = 8765
 
+
 # model_path = os.path.abspath("./python/models/vosk-model-en-us-0.22")
 # asr = ASR_VOSK(model_path, sample_rate=RATE)
-asr = ASR_WAV2VEC(sample_rate=RATE)
+asr = ASR_WAV2VEC(sample_rate=16000)
 
 # List of connected clients
 connected = dict()
@@ -43,7 +42,8 @@ async def audio_channel(websocket: WebSocketCLient):
         await audio.receive()
 
     async def audio_process():
-        await asr.transcribe(audio_queue)
+        # await asr.transcribe(audio_queue)
+        await asyncio.sleep(0.1)
 
     await asyncio.gather(audio_receiver(), audio_process())
 

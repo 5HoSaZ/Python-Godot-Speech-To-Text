@@ -7,6 +7,7 @@ import librosa
 import numpy as np
 from collections import deque
 import asyncio
+import wave
 
 
 class BytesStream:
@@ -44,6 +45,7 @@ class RingBuffer:
                 self.out_frame += b"".join([f for f, _ in self.buffer])
         else:
             self.out_frame += frame
+            self.buffer.append((frame, state))
             unvoiced = sum([1 - s for _, s in self.buffer])
             if unvoiced > self.threshold:
                 self.triggered = False
@@ -55,7 +57,7 @@ class RingBuffer:
 def resample_bytes(frame: bytes, in_rate, out_rate):
     frame = np.frombuffer(frame, np.int16) / 32768
     frame = librosa.resample(frame, orig_sr=in_rate, target_sr=out_rate)
-    frame = np.array(frame * 32768, dtype=np.int16).astype(np.float32)
+    frame = np.array(frame * 32768, dtype=np.int16)
     return frame.tobytes()
 
 
@@ -84,18 +86,25 @@ class WebSocketAudio_VAD(Audio):
         )
 
     async def receive(self):
-        frame_length = 2 * int(16 * self.vad_ms)
-        async for frame in self.ws:
-            if frame == "stop":
-                break
-            next_frame = frame[8:]
-            # Rate: 44100 -> 16000
-            next_frame = resample_bytes(next_frame, self.SAMPLE_RATE, 16000)
-            self.stream.write(next_frame)
-            # VAD every 480 frame (960 bytes PCM16)
-            while len(self.stream) >= frame_length:
-                frame = self.stream.read(frame_length)
-                is_speech = self.vad.is_speech(frame, 16000)
-                self.ring_buffer.accept(frame, is_speech, self.audio_queue)
-        print("Done")
-        self.audio_queue.put_nowait("stop")
+        with wave.open("output.wav", mode="wb") as wav_file:
+            wav_file.setnchannels(1)
+            wav_file.setsampwidth(2)
+            wav_file.setframerate(16000)
+            frame_length = 2 * int(16 * self.vad_ms)
+            async for frame in self.ws:
+                if frame == "stop":
+                    break
+                next_frame = frame[8:]
+
+                # Rate: 44100 -> 16000
+                next_frame = resample_bytes(next_frame, self.SAMPLE_RATE, 16000)
+                wav_file.writeframes(next_frame)
+                self.stream.write(next_frame)
+                # VAD every 480 frame (960 bytes PCM16)
+                while len(self.stream) >= frame_length:
+                    frame = self.stream.read(frame_length)
+                    is_speech = self.vad.is_speech(frame, 16000)
+                    print(is_speech)
+                    self.ring_buffer.accept(frame, is_speech, self.audio_queue)
+            print("Done")
+            self.audio_queue.put_nowait("stop")

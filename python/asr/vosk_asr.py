@@ -21,8 +21,8 @@ class ASR_VOSK(ASRInterface):
 
     async def transcribe(self, audio_queue: asyncio.Queue):
         while True:
-            frame: bytes | None = await audio_queue.get()
-            if frame is None:
+            frame = await audio_queue.get()
+            if frame == "stop":
                 break
             if self.rec.AcceptWaveform(frame):
                 result = self.rec.Result()

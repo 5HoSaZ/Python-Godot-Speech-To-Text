@@ -12,4 +12,4 @@ class WebsocketAudio(Audio):
     async def receive(self):
         async for frame in self.ws:
             self.audio_queue.put_nowait(frame[8:])
-        self.audio_queue.put_nowait(None)
+        self.audio_queue.put_nowait("stop")

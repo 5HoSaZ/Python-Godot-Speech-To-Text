@@ -43,10 +43,11 @@ class ASR_WAV2VEC(ASRInterface):
         duration = 0
         frame_duration = 512 / 44100
         while True:
-            frame += await audio_queue.get()
-            duration += frame_duration
-            if frame is None:
+            next_frame = await audio_queue.get()
+            if next_frame == "stop":
                 break
+            frame += next_frame
+            duration += frame_duration
             if duration < 2:
                 continue
             frame = (

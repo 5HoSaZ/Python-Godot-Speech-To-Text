@@ -23,7 +23,7 @@ class MicAudio(Audio):
         return None, pyaudio.paContinue
 
     async def __aexit__(self, type, value, traceback):
-        self.audio_queue.put_nowait(None)
+        self.audio_queue.put_nowait("stop")
         await self.close()
 
     async def close(self):

@@ -3,7 +3,7 @@ import websockets
 import numpy as np
 import uuid
 import os
-from asr.vosk_asr import ASR_VOSK
+from asr import ASR_VOSK, ASR_WAV2VEC
 from audio import WebsocketAudio
 
 WebSocketCLient = websockets.WebSocketClientProtocol
@@ -13,11 +13,9 @@ RATE = 44100
 HOST = "localhost"
 PORT = 8765
 
-# recase_path = os.path.abspath("./python/models/vosk-recasepunc-en-0.22/recasepunc.py")
-# recase_ckpt = os.path.abspath("./python/models/vosk-recasepunc-en-0.22/checkpoint")
-
-model_path = os.path.abspath("./python/models/vosk-model-en-us-0.22")
-asr = ASR_VOSK(model_path, sample_rate=RATE)
+# model_path = os.path.abspath("./python/models/vosk-model-en-us-0.22")
+# asr = ASR_VOSK(model_path, sample_rate=RATE)
+asr = ASR_WAV2VEC(sample_rate=RATE)
 
 # List of connected clients
 connected = dict()

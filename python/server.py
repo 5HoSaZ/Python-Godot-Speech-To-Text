@@ -3,9 +3,8 @@ import websockets
 import numpy as np
 import uuid
 import os
-import json
-import pyaudio
-from vosk import Model, KaldiRecognizer
+from asr.vosk_asr import ASR_VOSK
+from audio import WebsocketAudio
 
 WebSocketCLient = websockets.WebSocketClientProtocol
 
@@ -14,23 +13,11 @@ RATE = 44100
 HOST = "localhost"
 PORT = 8765
 
-# model_path = os.path.abspath("./python/models/vosk-model-en-us-0.22")
 # recase_path = os.path.abspath("./python/models/vosk-recasepunc-en-0.22/recasepunc.py")
 # recase_ckpt = os.path.abspath("./python/models/vosk-recasepunc-en-0.22/checkpoint")
 
-# model = Model(model_path=model_path)
-# rec = KaldiRecognizer(model, RATE)
-# print("Model loaded")
-
-p = pyaudio.PyAudio()
-player = p.open(
-    format=pyaudio.paInt16,
-    channels=1,
-    rate=RATE,
-    output=True,
-    frames_per_buffer=CHUNK,
-)
-
+model_path = os.path.abspath("./python/models/vosk-model-en-us-0.22")
+asr = ASR_VOSK(model_path, sample_rate=RATE)
 
 # List of connected clients
 connected = dict()
@@ -51,32 +38,14 @@ async def handler(websocket: WebSocketCLient, path: str):
 
 
 async def audio_channel(websocket: WebSocketCLient):
-    audio_queue = asyncio.Queue()
+    audio = WebsocketAudio(websocket)
+    audio_queue = audio.get_queue()
 
     async def audio_receiver():
-        print("Listening...")
-        async for frames in websocket:
-            # Audio frames should be a byte of int16
-            audio_queue.put_nowait(frames[8:])
-        audio_queue.put_nowait(None)
+        await audio.receive()
 
     async def audio_process():
-        while True:
-            data = await audio_queue.get()
-            if data is None:
-                break
-            # if rec.AcceptWaveform(data):
-            #     result = rec.Result()
-            #     text = json.loads(result)["text"]
-            #     print(f"Recognized: {text}")
-            # else:
-            #     partial_result = rec.PartialResult()
-            #     print(f"Partial: {json.loads(partial_result)['partial']}")
-            #     await websocket.send(
-            #         f"Partial: {json.loads(partial_result)['partial']}"
-            #     )
-            data = np.frombuffer(data, dtype=np.int16)
-            player.write(data, CHUNK)
+        await asr.transcribe(audio_queue)
 
     await asyncio.gather(audio_receiver(), audio_process())
 

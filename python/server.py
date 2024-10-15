@@ -4,7 +4,7 @@ import numpy as np
 import uuid
 import os
 from asr import ASR_VOSK, ASR_WAV2VEC
-from audio import WebsocketAudio
+from audio import WebsocketAudio, WebSocketAudio_VAD
 
 WebSocketCLient = websockets.WebSocketClientProtocol
 
@@ -36,7 +36,7 @@ async def handler(websocket: WebSocketCLient, path: str):
 
 
 async def audio_channel(websocket: WebSocketCLient):
-    audio = WebsocketAudio(websocket)
+    audio = WebSocketAudio_VAD(websocket)
     audio_queue = audio.get_queue()
 
     async def audio_receiver():

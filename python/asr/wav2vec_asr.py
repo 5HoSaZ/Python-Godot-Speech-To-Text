@@ -30,6 +30,7 @@ class GreedyCTCDecoder(torch.nn.Module):
 
 
 class ASR_WAV2VEC(ASRInterface):
+    """Wav2Vec pcm16"""
 
     def __init__(self, sample_rate):
         self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
@@ -41,11 +42,11 @@ class ASR_WAV2VEC(ASRInterface):
     async def transcribe(self, audio_queue: asyncio.Queue):
         frame = b""
         duration = 0
-        frame_duration = 512 / 44100
         while True:
             next_frame = await audio_queue.get()
             if next_frame == "stop":
                 break
+            frame_duration = len(next_frame) / 2 / self.sample_rate
             frame += next_frame
             duration += frame_duration
             if duration < 2:

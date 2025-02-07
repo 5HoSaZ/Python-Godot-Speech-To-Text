@@ -1,40 +1,53 @@
-[gd_scene load_steps=3 format=3 uid="uid://dy4suwcdgn7ar"]
+[gd_scene load_steps=5 format=3 uid="uid://dy4suwcdgn7ar"]
 
 [ext_resource type="Texture2D" uid="uid://jnc4l6hwfoec" path="res://assets/hand/hand.png" id="1_6xqeb"]
 
-[sub_resource type="SkeletonModificationStack2D" id="SkeletonModificationStack2D_1moaw"]
+[sub_resource type="SkeletonModificationStack2D" id="SkeletonModificationStack2D_dmhob"]
 enabled = true
 modification_count = 1
+
+[sub_resource type="Animation" id="Animation_pfi5x"]
+resource_name = "curve"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6n6sl"]
+_data = {
+"curve": SubResource("Animation_pfi5x")
+}
 
 [node name="Signer" type="Node2D"]
 
 [node name="Target" type="Node2D" parent="."]
 
-[node name="Polygon" type="Node2D" parent="."]
-
-[node name="Finger" type="Polygon2D" parent="Polygon"]
-position = Vector2(200, 136)
+[node name="Finger" type="Polygon2D" parent="Target"]
+position = Vector2(-13, 28)
 texture = ExtResource("1_6xqeb")
 skeleton = NodePath("../../Skeleton2D")
-polygon = PackedVector2Array(7.72238, -66.4572, -4.6423, -63.8541, -11.15, -48.2356, -13.7531, -17.6494, -19.61, 27.2539, -24.8162, 87.1248, 16.8332, 96.2356, 22.6901, 30.5077, 21.3886, -12.4432, 19.4362, -59.2987)
-uv = PackedVector2Array(222.157, 40.3481, 209.792, 42.9512, 203.285, 58.5697, 200.682, 89.156, 194.825, 134.059, 189.618, 193.93, 231.268, 203.041, 237.125, 137.313, 235.823, 94.3621, 233.871, 47.5066)
-polygons = [[0, 1, 3], [1, 2, 3], PackedInt32Array(0, 16, 15), PackedInt32Array(14, 13, 15), PackedInt32Array(15, 12, 13), PackedInt32Array(12, 11, 10, 9, 8), PackedInt32Array(7, 5, 6), PackedInt32Array(4, 7, 5), PackedInt32Array(4, 3, 7), PackedInt32Array(11, 7, 8), PackedInt32Array(15, 3, 12), PackedInt32Array(12, 11, 7), PackedInt32Array(12, 3, 7), PackedInt32Array(3, 8, 7), PackedInt32Array(3, 9, 8), PackedInt32Array(0, 9, 3)]
-bones = ["Finger", PackedFloat32Array(0, 0, 0, 0, 1, 1, 1, 1, 0, 0), "Finger/Digit1", PackedFloat32Array(0, 0, 0, 1, 1, 0, 0, 1, 1, 0), "Finger/Digit1/Digit2", PackedFloat32Array(1, 1, 1, 1, 0.00999999, 0.00999999, 0.00999999, 0.00999999, 1, 1)]
+polygon = PackedVector2Array(222.49, 37.2614, 236.081, 47.1797, 239.02, 65.9142, 238.285, 84.6487, 237.918, 99.3425, 238.285, 133.138, 236.816, 154.077, 233.51, 199.627, 186.857, 190.444, 190.163, 145.26, 193.102, 124.689, 197.51, 94.1997, 199.714, 78.7712, 201.551, 61.5061, 207.061, 42.0369, 213.074, 145.164, 214.671, 132.162, 217.179, 93.6159, 217.635, 84.2641)
+uv = PackedVector2Array(222.49, 37.2614, 236.081, 47.1797, 239.02, 65.9142, 238.285, 84.6487, 237.918, 99.3425, 238.285, 133.138, 236.816, 154.077, 233.51, 199.627, 186.857, 190.444, 190.163, 145.26, 193.102, 124.689, 197.51, 94.1997, 199.714, 78.7712, 201.551, 61.5061, 207.061, 42.0369, 213.074, 145.164, 214.671, 132.162, 217.179, 93.6159, 217.635, 84.2641)
+polygons = [PackedInt32Array(0, 14, 13, 12, 18, 3, 2, 1), PackedInt32Array(12, 11, 17, 18), PackedInt32Array(18, 3, 4, 17), PackedInt32Array(11, 10, 16, 5, 4, 17), PackedInt32Array(10, 9, 15, 16), PackedInt32Array(16, 5, 6, 15), PackedInt32Array(9, 8, 7, 6, 15)]
+bones = ["Finger", PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), "Finger/Digit1", PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), "Finger/Digit1/Digit2", PackedFloat32Array(1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1)]
+internal_vertex_count = 4
 
 [node name="Skeleton2D" type="Skeleton2D" parent="."]
-modification_stack = SubResource("SkeletonModificationStack2D_1moaw")
+modification_stack = SubResource("SkeletonModificationStack2D_dmhob")
 
 [node name="Finger" type="Bone2D" parent="Skeleton2D"]
-position = Vector2(192, 232)
-rest = Transform2D(1, 0, 0, 1, 192, 232)
+position = Vector2(194, 220)
+rest = Transform2D(1, 0, 0, 1, 194, 220)
 
 [node name="Digit1" type="Bone2D" parent="Skeleton2D/Finger"]
-position = Vector2(8, -64)
-rest = Transform2D(1, 0, 0, 1, 8, -64)
+position = Vector2(7, -53)
+rest = Transform2D(1, 0, 0, 1, 7, -53)
 
 [node name="Digit2" type="Bone2D" parent="Skeleton2D/Finger/Digit1"]
-position = Vector2(3, -48)
-rest = Transform2D(1, 0, 0, 1, 3, -48)
+position = Vector2(5, -48)
+rest = Transform2D(1, 0, 0, 1, 5, -48)
 auto_calculate_length_and_angle = false
-length = 40.357
-bone_angle = -85.58
+length = 48.2597
+bone_angle = -84.0531
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Skeleton2D")
+libraries = {
+"": SubResource("AnimationLibrary_6n6sl")
+}
